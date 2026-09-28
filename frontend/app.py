@@ -467,6 +467,15 @@ if uploaded_file is not None:
         # ====================================================
 
         st.info(
-            "This application is an AI-assisted "
+            "This application is an AI-assisted "   
             "screening tool and not a clinical diagnosis."
         )
+
+
+if supported and prediction in ["NORMAL,"PNEMONIA"]:
+    st.markdown("### was the prediction correct")
+
+st.error(
+    "could not connect tp feedback API."
+)
+st.code(str(exc))

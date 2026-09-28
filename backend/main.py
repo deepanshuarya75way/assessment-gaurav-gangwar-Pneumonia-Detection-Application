@@ -1,10 +1,12 @@
 # backend/main.py
 
 from io import BytesIO
+from pydantic import basemodel
 
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image, UnidentifiedImageError
+from feedback.database import initialize_database
 
 from backend.inference import predict_image
 
@@ -17,6 +19,8 @@ app = FastAPI(
     title="Pneumonia Detection Application API",
     version="1.0.0",
 )
+
+initialize_database()
 
 
 # =========================================================
@@ -109,6 +113,47 @@ async def predict(
             "gradcam": None,
             "gradcam_url": None,
         }
+        
+class FeedbackReqest(Basemodel):
+    image_name:str
+    model_prediction:float
+
+    user_correct:bool
+
+    corrected_label:str|none = none
+    
+    @app.post("/feedback")
+     
+    def submit_feedback.("feedback:FeedbackRequest"):
+     if feedback.model_prediction not in[
+        "NORMAL"
+        "PNEUMONIA"
+
+     ]:
+
+     return{
+        "success": False
+        "messege": "correct finding is required"
+     }
+
+feedback_id = save_feedback(
+    image_name=feedback.image_name,
+    iamge_path=feedback.image_path,
+    model_confidance=FEEDBACK.model_prediction,
+    user_correct=feedback.user_correct,
+    corrected_label=feedback.corrected_label,
+
+)
+return{
+    "succees"
+    "feedback_id":feedback_id
+    "status":"PENDING"
+    
+}
+
+
+
+
 
 
     # -----------------------------------------------------
@@ -198,6 +243,7 @@ async def predict(
         }
 
 
+
     # -----------------------------------------------------
     # RESPONSE
     # -----------------------------------------------------
@@ -252,3 +298,7 @@ async def predict(
         "gradcam": None,
         "gradcam_url": None,
     }
+     
+
+
+
